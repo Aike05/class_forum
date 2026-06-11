@@ -1,0 +1,9 @@
+﻿{
+    "name": "aike05/class-forum",
+    "description": "班级论坛 - PHP+MySQL 课程设计",
+    "type": "project",
+    "require": {
+        "php": ">=7.3",
+        "ext-mysqli": "*"
+    }
+}
