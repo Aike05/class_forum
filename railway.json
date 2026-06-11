@@ -1,1 +1,1 @@
-{"build":{"builder":"NIXPACKS"},"deploy":{"startCommand":"php -S 0.0.0.0:$PORT -t ."}}
+{"build":{"builder":"NIXPACKS"},"deploy":{"startCommand":"bash start.sh"}}
