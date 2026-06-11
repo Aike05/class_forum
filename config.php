@@ -15,7 +15,7 @@ $isRailway = (bool)getenv('RAILWAY_ENVIRONMENT');
 if (!defined('DB_HOST')) define('DB_HOST', getenv('MYSQLHOST') ?: ($isRailway ? 'mysql.railway.internal' : 'localhost'));
 if (!defined('DB_USER')) define('DB_USER', getenv('MYSQLUSER') ?: 'root');
 if (!defined('DB_PASS')) define('DB_PASS', getenv('MYSQLPASSWORD') ?: getenv('MYSQL_ROOT_PASSWORD') ?: ($isRailway ? 'GMYlPMClIGDrpOfcEaqWoPQAyCfRziSC' : '123456'));
-if (!defined('DB_NAME')) define('DB_NAME', getenv('MYSQLDATABASE') ?: getenv('MYSQL_DATABASE') ?: 'class_forum');
+if (!defined('DB_NAME')) define('DB_NAME', getenv('MYSQLDATABASE') ?: getenv('MYSQL_DATABASE') ?: ($isRailway ? 'railway' : 'class_forum'));
 if (!defined('DB_PORT')) define('DB_PORT', getenv('MYSQLPORT') ?: '3306');
 
 // 创建数据库连接

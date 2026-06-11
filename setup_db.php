@@ -8,13 +8,15 @@
  */
 
 // 数据库连接参数（与 config.php 保持一致）
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '123456');
-define('DB_NAME', 'class_forum');
+$isRailway = (bool)getenv('RAILWAY_ENVIRONMENT');
+define('DB_HOST', getenv('MYSQLHOST') ?: ($isRailway ? 'mysql.railway.internal' : 'localhost'));
+define('DB_USER', getenv('MYSQLUSER') ?: 'root');
+define('DB_PASS', getenv('MYSQLPASSWORD') ?: getenv('MYSQL_ROOT_PASSWORD') ?: ($isRailway ? 'GMYlPMClIGDrpOfcEaqWoPQAyCfRziSC' : '123456'));
+define('DB_NAME', 'railway'); // Railway 数据库名固定为 railway
+define('DB_PORT', (int)(getenv('MYSQLPORT') ?: '3306'));
 
 // 先连接 MySQL 服务器（不指定数据库）
-$tempConn = @mysqli_connect(DB_HOST, DB_USER, DB_PASS);
+$tempConn = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, '', DB_PORT);
 if (!$tempConn) {
     die("<p style='color:red;'>MySQL连接失败: " . mysqli_connect_error() . "</p>");
 }
@@ -29,7 +31,7 @@ if (mysqli_query($tempConn, $sql)) {
 mysqli_close($tempConn);
 
 // 连接到新创建的数据库
-$conn = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$conn = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
 if (!$conn) {
     die("<p style='color:red;'>无法连接到数据库 '" . DB_NAME . "': " . mysqli_connect_error() . "</p>");
 }
