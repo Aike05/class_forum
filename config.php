@@ -2,23 +2,19 @@
 /**
  * 班级论坛网站 - 数据库配置文件
  */
+// Railway 上 PHP 内置服务器可能需要配置 session 路径
+if (getenv('RAILWAY_ENVIRONMENT') && !is_dir(sys_get_temp_dir() . '/sessions')) {
+    @mkdir(sys_get_temp_dir() . '/sessions', 0777, true);
+    session_save_path(sys_get_temp_dir() . '/sessions');
+}
 session_start();
 
-// 数据库连接参数 - Railway 环境变量优先，否则使用本地配置
-$mysqlHost = getenv('MYSQLHOST');
-// 过滤掉未解析的 Railway 引用模板
-if (!$mysqlHost || strpos($mysqlHost, '${{') !== false) {
-    $mysqlHost = false;
-}
-if (!defined('DB_HOST')) define('DB_HOST', $mysqlHost ?: 'localhost');
+// 数据库连接参数 - 自动检测环境
+$isRailway = (bool)getenv('RAILWAY_ENVIRONMENT');
 
-$mysqlPass = getenv('MYSQLPASSWORD') ?: getenv('MYSQL_ROOT_PASSWORD');
-if ($mysqlPass && strpos($mysqlPass, '${{') !== false) {
-    $mysqlPass = false;
-}
-if (!defined('DB_PASS')) define('DB_PASS', $mysqlPass ?: '123456');
-
+if (!defined('DB_HOST')) define('DB_HOST', getenv('MYSQLHOST') ?: ($isRailway ? 'mysql.railway.internal' : 'localhost'));
 if (!defined('DB_USER')) define('DB_USER', getenv('MYSQLUSER') ?: 'root');
+if (!defined('DB_PASS')) define('DB_PASS', getenv('MYSQLPASSWORD') ?: getenv('MYSQL_ROOT_PASSWORD') ?: ($isRailway ? 'GMYlPMClIGDrpOfcEaqWoPQAyCfRziSC' : '123456'));
 if (!defined('DB_NAME')) define('DB_NAME', getenv('MYSQLDATABASE') ?: getenv('MYSQL_DATABASE') ?: 'class_forum');
 if (!defined('DB_PORT')) define('DB_PORT', getenv('MYSQLPORT') ?: '3306');
 
