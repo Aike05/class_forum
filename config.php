@@ -4,14 +4,15 @@
  */
 session_start();
 
-// 数据库连接参数（防止重复定义报错）
-if (!defined('DB_HOST')) define('DB_HOST', 'localhost');
-if (!defined('DB_USER')) define('DB_USER', 'root');
-if (!defined('DB_PASS')) define('DB_PASS', '123456');
-if (!defined('DB_NAME')) define('DB_NAME', 'class_forum');
+// 数据库连接参数 - Railway 环境变量优先，否则使用本地配置
+if (!defined('DB_HOST')) define('DB_HOST', getenv('MYSQLHOST') ?: 'localhost');
+if (!defined('DB_USER')) define('DB_USER', getenv('MYSQLUSER') ?: 'root');
+if (!defined('DB_PASS')) define('DB_PASS', getenv('MYSQLPASSWORD') ?: getenv('MYSQL_ROOT_PASSWORD') ?: '123456');
+if (!defined('DB_NAME')) define('DB_NAME', getenv('MYSQLDATABASE') ?: getenv('MYSQL_DATABASE') ?: 'class_forum');
+if (!defined('DB_PORT')) define('DB_PORT', getenv('MYSQLPORT') ?: '3306');
 
 // 创建数据库连接
-$conn = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$conn = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, (int)DB_PORT);
 
 // 检查连接
 if (!$conn) {
