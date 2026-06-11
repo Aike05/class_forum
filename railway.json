@@ -1,1 +1,8 @@
-{"build":{"builder":"RAILPACK"}}
+{
+  "build": {
+    "builder": "RAILPACK"
+  },
+  "deploy": {
+    "startCommand": "php -S 0.0.0.0:$PORT -t ."
+  }
+}
